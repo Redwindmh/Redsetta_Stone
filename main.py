@@ -32,9 +32,9 @@ Output_text.place(x = 590, y = 100)
 t_engine = ['Google Translator', 'ChatGpt Translator', 'DeepL Translator']
 
 languages = [
-    GoogleTranslator().get_supported_languages(),
-    ChatGptTranslator(api_key=OPENAI_API_KEY).get_supported_languages(),
-    DeeplTranslator(api_key=DEEPL_API_KEY).get_supported_languages(),
+    GoogleTranslator().get_supported_languages("as_dict"),
+    ChatGptTranslator(api_key=OPENAI_API_KEY).get_supported_languages("as_dict"),
+    DeeplTranslator(api_key=DEEPL_API_KEY).get_supported_languages("as_dict"),
     ]
 translation_service = ttk.Combobox(root, value = t_engine, width = 22)
 translation_service.place(x=425,y=30)
@@ -49,7 +49,7 @@ targ_lang.place(x=800,y=65)
 targ_lang.set('Choose target language')
 
 def set_language(event):
-    language = languages[int(translation_service.current())]
+    language = list(languages[int(translation_service.current())].keys())
 
     src_lang['value'] = ''
     targ_lang['value'] = ''
@@ -60,24 +60,20 @@ def set_language(event):
 translation_service.bind("<<ComboboxSelected>>", set_language)
 
 def Translate():
-    #Maybe they don't all need to call the targ_lang at once here?
-    # translator = [GoogleTranslator(source=src_lang.get(), target=targ_lang.get()),
-    #               ChatGptTranslator(api_key=OPENAI_API_KEY, target=targ_lang.get()),
-    #               DeeplTranslator(api_key=DEEPL_API_KEY, source=src_lang.get(), target=targ_lang.get(), use_free_api=True)]
-
     translator = [GoogleTranslator(),
                   ChatGptTranslator(api_key=OPENAI_API_KEY),
                   DeeplTranslator(api_key=DEEPL_API_KEY)]
 
-    translator[int(translation_service.current())].source = src_lang.get()
-    translator[int(translation_service.current())].target = targ_lang.get()
-
-    print(translator[int(translation_service.current())].target)
+    translator[int(translation_service.current())].source = languages[int(translation_service.current())][f"{src_lang.get()}"]
+    translator[int(translation_service.current())].target = languages[int(translation_service.current())][f"{targ_lang.get()}"]
 
     translated = translator[int(translation_service.current())].translate(text = Input_text.get(1.0, END)).strip(' " ' )
 
     Output_text.delete(1.0, END)
     Output_text.insert(END, translated)
+
+    if translator == ChatGptTranslator:
+        print(ChatGptTranslator["model"])
 
 translate_button = Button(root, text = 'Translate', font = 'arial 12 bold', pady = 5, command = Translate, bg = 'red', activeforeground = 'red')
 translate_button.place(x=490,y=320)
