@@ -29,10 +29,11 @@ Label(root, text = 'Translation', font = 'arial 13 bold', bg = 'black').place(x=
 Output_text = Text(root, font = 'arial 12', height = 11, wrap = WORD, padx = 5, pady = 5, width = 60)
 Output_text.place(x = 590, y = 100)
 
-t_engine = ['Google Translator', 'ChatGpt Translator', 'DeepL Translator']
+t_engine = ['Google Translator', 'ChatGpt Translator (3.5 Turbo)', 'ChatGpt Translator (4o)', 'DeepL Translator']
 
 languages = [
     GoogleTranslator().get_supported_languages("as_dict"),
+    ChatGptTranslator(api_key=OPENAI_API_KEY).get_supported_languages("as_dict"),
     ChatGptTranslator(api_key=OPENAI_API_KEY).get_supported_languages("as_dict"),
     DeeplTranslator(api_key=DEEPL_API_KEY).get_supported_languages("as_dict"),
     ]
@@ -61,7 +62,8 @@ translation_service.bind("<<ComboboxSelected>>", set_language)
 
 def Translate():
     translator = [GoogleTranslator(),
-                  ChatGptTranslator(api_key=OPENAI_API_KEY),
+                  ChatGptTranslator(api_key=OPENAI_API_KEY,model="gpt-3.5-turbo"),
+                  ChatGptTranslator(api_key=OPENAI_API_KEY,model="gpt-4o"),
                   DeeplTranslator(api_key=DEEPL_API_KEY)]
 
     translator[int(translation_service.current())].source = languages[int(translation_service.current())][f"{src_lang.get()}"]
@@ -71,9 +73,6 @@ def Translate():
 
     Output_text.delete(1.0, END)
     Output_text.insert(END, translated)
-
-    if translator == ChatGptTranslator:
-        print(ChatGptTranslator["model"])
 
 translate_button = Button(root, text = 'Translate', font = 'arial 12 bold', pady = 5, command = Translate, bg = 'red', activeforeground = 'red')
 translate_button.place(x=490,y=320)
