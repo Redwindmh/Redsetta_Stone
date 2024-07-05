@@ -51,6 +51,8 @@ targ_lang.set('Choose target language')
 
 def set_language(event):
     language = list(languages[int(translation_service.current())].keys())
+    language = [lang.capitalize() for lang in language]
+    print(language)
 
     src_lang['value'] = ''
     targ_lang['value'] = ''
