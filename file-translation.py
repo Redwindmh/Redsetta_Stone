@@ -14,7 +14,7 @@ doc = docx.Document()
 doc.add_heading('This might work', 0)
 
 def translate_doc():
-    translation = ChatGptTranslator(api_key = OPENAI_API_KEY, source = "ja", target = "en").translate_file(file_path)
+    translation = ChatGptTranslator(api_key = OPENAI_API_KEY, source = "ja", target = "en" model="gpt-4o-2024-08-06").translate_file(file_path)
 
     doc.add_paragraph(translation)
 
