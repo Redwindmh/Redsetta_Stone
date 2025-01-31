@@ -1,1 +1,6 @@
+__pycache__
+.env
+.translate_venv
+to_be_translated/*
+translated/*
 config.py
