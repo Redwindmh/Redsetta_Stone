@@ -4,7 +4,7 @@ from tkinter.filedialog import askopenfile
 import time
 from deep_translator import GoogleTranslator, ChatGptTranslator, DeeplTranslator
 from config import OPENAI_API_KEY, DEEPL_API_KEY
-from deep_seek_setup import DeepSeek
+# from deep_seek_setup import DeepSeek
 
 root = Tk()
 root.geometry("1080x400")
